@@ -26,6 +26,8 @@ public class MainFragmentUser extends Fragment {
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(myAdapter);
 
+        //Wagwan 
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
