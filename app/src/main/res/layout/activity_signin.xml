@@ -8,13 +8,20 @@
 
     android:gravity="center"
     android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOGIN"
+        android:textSize="24dp"
+        android:textColor="@color/colorAccent"
+        android:paddingBottom="75dp"/>
 
     <ImageView
         android:id="@+id/image_log"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/imgbin-blue-water-drop-light-small-fresh-blue-drops-water-drop-DnTNf0UZxNF8pUhA9zYy3t0JZ_t" />
+        android:src="@drawable/Water" />
 
     <EditText
         android:id="@+id/email"
