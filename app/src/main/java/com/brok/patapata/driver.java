@@ -95,6 +95,7 @@ public class driver extends AppCompatActivity implements NavigationView.OnNaviga
     }
 
     private PendingIntent getPendingIntent() {
+        return null;
     }
 
     private void buildLocationRequest() {
