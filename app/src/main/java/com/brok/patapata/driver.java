@@ -30,14 +30,10 @@ import android.widget.Toast;
 
 public class driver extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    static driver instance;
 
-    public static driver getInstance() {
-        return instance;
-    }
 
-    LocationRequest locationRequest;
-    FusedLocationProviderClient fusedLocationProviderClient;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,50 +58,16 @@ public class driver extends AppCompatActivity implements NavigationView.OnNaviga
             navigationView.setCheckedItem(R.id.nav_not);
         }
 
-        instance = this;
 
 
-        Dexter.withActivity(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        updatelocation();
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                        Toast.makeText(driver.this, "You Must Accept", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
-                    }
-                }).check();
-    }
-
-    private void updatelocation() {
-        buildLocationRequest();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         
-            return;
-        }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, getPendingIntent());
-    }
+                    }
 
-    private PendingIntent getPendingIntent() {
-        return null;
-    }
 
-    private void buildLocationRequest() {
 
-        locationRequest= new LocationRequest();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(3000);
-        locationRequest.setSmallestDisplacement(5);
-    }
+
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
