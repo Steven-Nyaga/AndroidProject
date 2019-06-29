@@ -20,4 +20,6 @@
     <color name="finish_transaction">#008000</color>
     <color name="cancel_transaction">#FFFF00</color>
     <color name="report_transaction">#66FF0000</color>
+    <color name="backgroundstart">#19AA8B</color>
+    <color name="backgroundstop">#23A7D8</color>
 </resources>
