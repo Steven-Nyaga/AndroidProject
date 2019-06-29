@@ -1,19 +1,33 @@
 package com.brok.patapata;
+import android.Manifest;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.material.navigation.NavigationView;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class driver extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-
-
+    static driver instance;
+    public static driver getInstance(){
+        return instance;
+    }
+LocationRequest locationRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +51,40 @@ public class driver extends AppCompatActivity implements NavigationView.OnNaviga
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new YourRequests()).commit();
             navigationView.setCheckedItem(R.id.nav_not);
         }
+
+instance=this;
+
+
+        Dexter.withActivity(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        updatelocation();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Toast.makeText(driver.this, "You Must Accept", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                }).check();
+    }
+
+    private void updatelocation() {
+        buildLocationRequest();
+    }
+
+    private void buildLocationRequest() {
+
+        locationRequest= new LocationRequest();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(3000);
+        locationRequest.getSmallestDisplacement(10meters);
     }
 
     @Override
