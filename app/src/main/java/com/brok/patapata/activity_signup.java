@@ -122,4 +122,6 @@ public class activity_signup extends AppCompatActivity {
         super.onResume();
         progressBar.setVisibility(View.GONE);
     }
+
+
 }
