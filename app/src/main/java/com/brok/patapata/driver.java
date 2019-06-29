@@ -1,9 +1,15 @@
 package com.brok.patapata;
+
 import android.Manifest;
+import android.app.PendingIntent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -17,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -24,10 +31,13 @@ import android.widget.Toast;
 public class driver extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     static driver instance;
-    public static driver getInstance(){
+
+    public static driver getInstance() {
         return instance;
     }
-LocationRequest locationRequest;
+
+    LocationRequest locationRequest;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +57,12 @@ LocationRequest locationRequest;
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if(savedInstanceState==null) {
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new YourRequests()).commit();
             navigationView.setCheckedItem(R.id.nav_not);
         }
 
-instance=this;
+        instance = this;
 
 
         Dexter.withActivity(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -76,6 +86,15 @@ instance=this;
 
     private void updatelocation() {
         buildLocationRequest();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        
+            return;
+        }
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, getPendingIntent());
+    }
+
+    private PendingIntent getPendingIntent() {
     }
 
     private void buildLocationRequest() {
@@ -84,7 +103,7 @@ instance=this;
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(3000);
-        locationRequest.getSmallestDisplacement(10meters);
+        locationRequest.setSmallestDisplacement(5);
     }
 
     @Override
