@@ -7,6 +7,20 @@
     tools:context=".activity_signup"
     android:orientation="vertical"
     android:gravity="center">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CREATE ACCOUNT"
+        android:textSize="24dp"
+        android:textColor="@color/colorAccent"
+        android:paddingBottom="75dp"/>
+
+    <ImageView
+        android:id="@+id/image_log"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/water" />
 
     <EditText
         android:id="@+id/email"
