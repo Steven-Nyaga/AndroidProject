@@ -50,11 +50,11 @@ public class activity_user extends AppCompatActivity implements NavigationView.O
             case R.id.nav_option:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new activity_sugg()).commit();
                 break;
-                /* Add for the Reports
-            case R.id.nav_:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new activity_sugg()).commit();
+
+            case R.id.nav_report:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReportFragment()).commit();
                 break;
-                */
+
         }
 
         drawer.closeDrawer(GravityCompat.START);
