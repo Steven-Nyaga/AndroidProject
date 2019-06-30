@@ -29,7 +29,7 @@ public class report_adapter extends RecyclerView.Adapter<report_adapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-     
+     holder.report.setText(reports.get(position).getReports());
     }
 
     @Override
