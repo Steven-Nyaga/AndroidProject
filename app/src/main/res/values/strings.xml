@@ -63,5 +63,6 @@
         <item>10000</item>
     </string-array>
     <string name="title_activity_map">Map</string>
+    <string name="report">REPORT</string>
 
 </resources>
