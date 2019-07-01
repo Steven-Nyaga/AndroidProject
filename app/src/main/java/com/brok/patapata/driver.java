@@ -92,9 +92,9 @@ private LocationRequest locationRequest;
                     Double longitude = locationResult.getLastLocation().getLongitude();
                     if (latitude != null&&longitude!=null&&auth.getCurrentUser() != null){
 
-                            FirebaseDatabase.getInstance().getReference("dlocation").child(FirebaseAuth.
+                            FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
                                     getInstance().getCurrentUser().getUid()).child("latitude").setValue(latitude);
-                            FirebaseDatabase.getInstance().getReference("dlocation").child(FirebaseAuth.
+                            FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
                                     getInstance().getCurrentUser().getUid()).child("longitude").setValue(longitude);
 
                     }
