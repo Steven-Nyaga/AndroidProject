@@ -2,6 +2,8 @@ package com.brok.patapata;
 
 import android.Manifest;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -9,7 +11,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -17,8 +21,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 
 
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -29,19 +37,22 @@ import android.view.MenuItem;
 
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 public class driver extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
 
-
+    private FirebaseAuth auth;
     private FusedLocationProviderClient fusedLocationClient;
+private LocationRequest locationRequest;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver);
-
+        auth = FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,38 +71,96 @@ public class driver extends AppCompatActivity implements NavigationView.OnNaviga
             navigationView.setCheckedItem(R.id.nav_not);
         }
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            return;
-        }
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
+
+        if (auth.getCurrentUser() != null) {
+
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                return;
+            }
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            locationRequest = new LocationRequest();
+            locationRequest.setInterval(5000);
+            locationRequest.setFastestInterval(2000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    super.onLocationResult(locationResult);
+                    Double latitude = locationResult.getLastLocation().getLatitude();
+                    Double longitude = locationResult.getLastLocation().getLongitude();
+                    if (latitude != null&&longitude!=null&&auth.getCurrentUser() != null){
+
                             FirebaseDatabase.getInstance().getReference("dlocation").child(FirebaseAuth.
-                                getInstance().getCurrentUser().getUid()).setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
-
-                                if (task.isSuccessful()){
-                                    Toast.makeText(driver.this, "Location service Working" + task.getException(),
-                                            Toast.LENGTH_SHORT).show();
-                                }else{Toast.makeText(driver.this, "Location Service failed." + task.getException(),
-                                        Toast.LENGTH_SHORT).show();}
-                            }
-                        });
-                        }
-                    }
-                });
+                                    getInstance().getCurrentUser().getUid()).child("latitude").setValue(latitude);
+                            FirebaseDatabase.getInstance().getReference("dlocation").child(FirebaseAuth.
+                                    getInstance().getCurrentUser().getUid()).child("longitude").setValue(longitude);
 
                     }
+                }
+            }, getMainLooper());
+        }
+
+//callPermissions();
+
+
+//        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//
+//            return;
+//        }
 
 
 
 
+
+//        fusedLocationClient.getLastLocation()
+//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+//                    @Override
+//                    public void onSuccess(Location location) {
+//                        // Got last known location. In some rare situations this can be null.
+//                        if (location != null) {
+//                            FirebaseDatabase.getInstance().getReference("dlocation").child(FirebaseAuth.
+////                                getInstance().getCurrentUser().getUid()).setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+//
+//                                if (task.isSuccessful()){
+//                                    Toast.makeText(driver.this, "Location service Working" + task.getException(),
+//                                            Toast.LENGTH_SHORT).show();
+//                                }else{Toast.makeText(driver.this, "Location Service failed." + task.getException(),
+//                                        Toast.LENGTH_SHORT).show();}
+//                            }
+//                        });
+//                        }
+//                    }
+//                });
+
+
+
+                    }
+
+
+public void requestLocationUpdates(){
+
+
+        }
+
+//public void callPermissions(){
+//    String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+//    Permissions.check(this, permissions, "Location permission required", null/*options*/, new PermissionHandler() {
+//        @Override
+//        public void onGranted() {
+//            requestLocationUpdates();
+//        }
+//
+//        @Override
+//        public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+//            super.onDenied(context, deniedPermissions);
+//            callPermissions();
+//        }
+//    });
+//}
 
 
 
@@ -115,6 +184,7 @@ public class driver extends AppCompatActivity implements NavigationView.OnNaviga
 
 
     }
+
 
 
 
