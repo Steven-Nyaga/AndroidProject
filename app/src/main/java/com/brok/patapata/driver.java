@@ -71,8 +71,8 @@ public class driver extends AppCompatActivity implements NavigationView.OnNaviga
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
-                            FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
-                                getInstance().getCurrentUser().getUid()).child("location").setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            FirebaseDatabase.getInstance().getReference("dlocation").child(FirebaseAuth.
+                                getInstance().getCurrentUser().getUid()).setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
 
