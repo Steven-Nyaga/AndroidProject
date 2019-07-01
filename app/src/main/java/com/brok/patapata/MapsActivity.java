@@ -8,32 +8,51 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener,GoogleMap.OnMarkerClickListener {
+    private GoogleMap mMap;
+    private ChildEventListener mChildEcventListener;
     private Location currentLocation;
     private Button report;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static final int LOCATION_REQUEST_CODE = 101;
+    private DatabaseReference mUsers;
+    Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
+        ChildEventListener mChildEventListener;
+        mUsers= FirebaseDatabase.getInstance().getReference().child("users").child("ehKn15wBgNTaxaNtimuNhtqVDuJ3").child("location");
+        mUsers.push().setValue(marker);
+
         report= (Button) findViewById(R.id.report_transaction);
         report.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
         //MarkerOptions are used to create a new Marker.You can specify location, title etc with MarkerOptions
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("");
@@ -90,6 +109,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
         //Adding the created the marker on the map
         googleMap.addMarker(markerOptions);
+        //for the driver
+        mMap = googleMap;
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
+        //googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //for (DataSnapshot s:dataSnapshot.getChildren()){
+                    //double r = s.getValue(double.class);
+                    //LocationInformation user = new LocationInformation(r);
+                    //LocationInformation user = s.getValue(LocationInformation.class);
+                    //LatLng location = new LatLng(user.latitude, user.longitude);
+                    double lat = dataSnapshot.child("latitude").getValue(Double.class);
+                    double lng = dataSnapshot.child("longitude").getValue(Double.class);
+                    LatLng location = new LatLng(lat, lng);
+                    mMap.addMarker(new MarkerOptions().position(location)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+
+                //}
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResult) {
@@ -102,5 +147,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 break;
         }
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
     }
 }
