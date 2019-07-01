@@ -41,7 +41,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static final int LOCATION_REQUEST_CODE = 101;
     private DatabaseReference mUsers;
+    private DatabaseReference mUser;
+    private DatabaseReference mDriver;
     Marker marker;
+    String rate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +53,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         ChildEventListener mChildEventListener;
-        mUsers= FirebaseDatabase.getInstance().getReference().child("users").child("ehKn15wBgNTaxaNtimuNhtqVDuJ3").child("location");
+
+        mUsers= FirebaseDatabase.getInstance().getReference().child("dlocation").child("kD3ulDQSUhdeIOvBo510ythiBU02");
         mUsers.push().setValue(marker);
+
+
+        mUser= FirebaseDatabase.getInstance().getReference().child("dlocation").child("UVSH8JLWxngFI3rPaMECa9CCn0x2");
+        mUser.push().setValue(marker);
+        /*
+        mDriver= FirebaseDatabase.getInstance().getReference().child("user").child("UVSH8JLWxngFI3rPaMECa9CCn0x2");
+        mDriver.push().setValue(marker);
+        */
 
         report= (Button) findViewById(R.id.report_transaction);
         report.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMarkerClickListener(this);
         //googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
         mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -135,6 +148,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+
+        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                double lat = dataSnapshot.child("latitude").getValue(Double.class);
+                double lng = dataSnapshot.child("longitude").getValue(Double.class);
+                LatLng location = new LatLng(lat, lng);
+                mMap.addMarker(new MarkerOptions().position(location).title(rate)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResult) {
