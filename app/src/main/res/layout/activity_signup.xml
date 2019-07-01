@@ -23,7 +23,7 @@
         android:src="@drawable/water" />
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/u_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/email"

@@ -17,11 +17,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class activity_signup extends AppCompatActivity {
-    private EditText inputEmail, inputPassword;
+    private EditText email, inputPassword;
     private Button btnSignIn, btnSignUp;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
     public String status;
+    public String id;
 
 
     @Override
@@ -34,7 +35,7 @@ public class activity_signup extends AppCompatActivity {
 
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.reg_button);
-        inputEmail = (EditText) findViewById(R.id.email);
+        email = (EditText) findViewById(R.id.u_email);
         inputPassword = (EditText) findViewById(R.id.pass);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -57,11 +58,11 @@ public class activity_signup extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final String email = inputEmail.getText().toString().trim();
+                final String inputEmail = email.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
 
-                if (TextUtils.isEmpty(email)) {
+                if (TextUtils.isEmpty(inputEmail)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -78,7 +79,7 @@ public class activity_signup extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
                 //create user
-                auth.createUserWithEmailAndPassword(email, password)
+                auth.createUserWithEmailAndPassword(inputEmail, password)
                         .addOnCompleteListener(activity_signup.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -92,7 +93,8 @@ public class activity_signup extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                 } else {
                                     status = "user";
-                                    POJO_user user = new POJO_user(status, email);
+                                    id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                    POJO_user user = new POJO_user(status, inputEmail, id);
 
                                     FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
                                             getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
