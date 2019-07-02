@@ -64,22 +64,22 @@ private LocationRequest locationRequest;
         setSupportActionBar(toolbar);
 
 cUser = (TextView) findViewById(R.id.currentUser);
-        Users = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
-                getInstance().getCurrentUser().getUid());
-        Users.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user_email = dataSnapshot.child("inputEmail").getValue().toString();
-                cUser.setText(user_email);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(driver.this, "Cannot display Failed", Toast.LENGTH_LONG).show();
-
-            }
-        });
+//        Users = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
+//                getInstance().getCurrentUser().getUid());
+//        Users.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                user_email = dataSnapshot.child("inputEmail").getValue().toString();
+//                cUser.setText(user_email);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(driver.this, "Cannot display Failed", Toast.LENGTH_LONG).show();
+//
+//            }
+//        });
 
         drawer = findViewById(R.id.draw_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
