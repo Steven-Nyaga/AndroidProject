@@ -56,10 +56,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker marker;
     FirebaseFirestore mFirestore;
     private FirebaseAuth auth;
-private BroadcastReceiver locationReceiver;
+    private BroadcastReceiver locationReceiver;
 
-private LatLng location;
-private String rates;
+    private LatLng location;
+    private String rates;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +69,11 @@ private String rates;
 
         ChildEventListener mChildEventListener;
 
-        mUsers= FirebaseDatabase.getInstance().getReference().child("users").child("UVSH8JLWxngFI3rPaMECa9CCn0x2");
+        mUsers = FirebaseDatabase.getInstance().getReference().child("users").child("UVSH8JLWxngFI3rPaMECa9CCn0x2");
         mUsers.push().setValue(marker);
 
 
-        report= (Button) findViewById(R.id.report_transaction);
+        report = (Button) findViewById(R.id.report_transaction);
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +101,6 @@ private String rates;
     }
 
 
-
     /*
     private void onAddLocation(){
         CollectionReference locations = mFirestore.collection("locations");
@@ -115,7 +115,7 @@ private String rates;
 */
     private void fetchLastLocation() {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             return;
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
@@ -125,54 +125,43 @@ private String rates;
                 if (location != null) {
                     currentLocation = location;
                     //Toast.makeText(MapsActivity.this,currentLocation.getLatitude()+" "+currentLocation.getLongitude(),Toast.LENGTH_SHORT).show();
-                    SupportMapFragment supportMapFragment= (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                    SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
                     supportMapFragment.getMapAsync(MapsActivity.this);
-                }else{
-                    Toast.makeText(MapsActivity.this,"No Location recorded",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MapsActivity.this, "No Location recorded", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-    private void initFirestore(){
-        mFirestore = FirebaseFirestore.getInstance();
-    }
+
+
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         //MarkerOptions are used to create a new Marker.You can specify location, title etc with MarkerOptions
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         //Adding the created the marker on the map
         googleMap.addMarker(markerOptions);
         //for the driver
         mMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMarkerClickListener(this);
-        //new
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_TIME_TICK);
-        locationReceiver = new BroadcastReceiver() {
-            //new
+        mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-
-                mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        double lat = dataSnapshot.child("latitude").getValue(Double.class);
-                        double lng = dataSnapshot.child("longitude").getValue(Double.class);
-                        rates = dataSnapshot.child("rates").getValue(String.class);
-                        String ident = dataSnapshot.child("id").getValue(String.class);
-                        location = new LatLng(lat, lng);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                double lat = dataSnapshot.child("latitude").getValue(Double.class);
+                double lng = dataSnapshot.child("longitude").getValue(Double.class);
+                rates = dataSnapshot.child("rates").getValue(String.class);
+                String ident = dataSnapshot.child("id").getValue(String.class);
+                location = new LatLng(lat, lng);
+                mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
 
 
-                        mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
 
 
-//new
-
-                        //                   mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                //                   mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
 //                    mFirestore = FirebaseFirestore.getInstance();
 //                    auth = FirebaseAuth.getInstance();
 //                    if (auth.getCurrentUser() != null) {
@@ -183,21 +172,18 @@ private String rates;
 //                    DocumentReference Ref = mFirestore.collection("locations").document("driver1");
 //                    Ref.update("latitude", lat);
 //                    Ref.update("longitude", lng);
-                        // }
+                // }
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-                //new
             }
-        };
-        registerReceiver(locationReceiver, intentFilter);
-        //new
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResult) {
         switch (requestCode) {
