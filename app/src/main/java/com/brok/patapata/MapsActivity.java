@@ -149,28 +149,30 @@ private String rates;
         mMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMarkerClickListener(this);
-        mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+        //new
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        locationReceiver = new BroadcastReceiver() {
+            //new
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    double lat = dataSnapshot.child("latitude").getValue(Double.class);
-                    double lng = dataSnapshot.child("longitude").getValue(Double.class);
-                    rates = dataSnapshot.child("rates").getValue(String.class);
-                    String ident = dataSnapshot.child("id").getValue(String.class);
-                     location = new LatLng(lat, lng);
+            public void onReceive(Context context, Intent intent) {
 
-//new
-                IntentFilter intentFilter = new IntentFilter();
-                intentFilter.addAction(Intent.ACTION_TIME_TICK);
-                locationReceiver = new BroadcastReceiver() {
+                mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onReceive(Context context, Intent intent) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        double lat = dataSnapshot.child("latitude").getValue(Double.class);
+                        double lng = dataSnapshot.child("longitude").getValue(Double.class);
+                        rates = dataSnapshot.child("rates").getValue(String.class);
+                        String ident = dataSnapshot.child("id").getValue(String.class);
+                        location = new LatLng(lat, lng);
+
+
                         mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                    }
-                };
-                registerReceiver(locationReceiver, intentFilter);
+
+
 //new
 
- //                   mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                        //                   mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
 //                    mFirestore = FirebaseFirestore.getInstance();
 //                    auth = FirebaseAuth.getInstance();
 //                    if (auth.getCurrentUser() != null) {
@@ -181,15 +183,20 @@ private String rates;
 //                    DocumentReference Ref = mFirestore.collection("locations").document("driver1");
 //                    Ref.update("latitude", lat);
 //                    Ref.update("longitude", lng);
-               // }
+                        // }
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                //new
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        };
+        registerReceiver(locationReceiver, intentFilter);
+        //new
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResult) {

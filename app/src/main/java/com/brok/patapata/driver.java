@@ -10,6 +10,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -20,11 +24,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
@@ -58,28 +60,14 @@ private LocationRequest locationRequest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.driver);
         auth = FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-cUser = (TextView) findViewById(R.id.currentUser);
-//        Users = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
-//                getInstance().getCurrentUser().getUid());
-//        Users.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                user_email = dataSnapshot.child("inputEmail").getValue().toString();
-//                cUser.setText(user_email);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(driver.this, "Cannot display Failed", Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
+
+
 
         drawer = findViewById(R.id.draw_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -95,6 +83,9 @@ cUser = (TextView) findViewById(R.id.currentUser);
             navigationView.setCheckedItem(R.id.nav_not);
         }
 
+        cUser = (TextView) findViewById(R.id.currentUser);
+        Users = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
+                getInstance().getCurrentUser().getUid());
 
 
         if (auth.getCurrentUser() != null) {
