@@ -10,10 +10,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -24,9 +22,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
@@ -42,6 +42,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.MenuItem;
 
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,9 +84,25 @@ private LocationRequest locationRequest;
             navigationView.setCheckedItem(R.id.nav_not);
         }
 
-        cUser = (TextView) findViewById(R.id.currentUser);
+
+        View header = navigationView.getHeaderView(0);
+        cUser = (TextView) header.findViewById(R.id.currentUser);
+       //cUser = (TextView) findViewById(R.id.currentUser);
         Users = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
                 getInstance().getCurrentUser().getUid());
+        Users.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user_email = dataSnapshot.child("inputEmail").getValue().toString();
+cUser.setText(user_email);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+
+            }
+        });
 
 
         if (auth.getCurrentUser() != null) {
