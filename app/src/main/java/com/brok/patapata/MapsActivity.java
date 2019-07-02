@@ -27,11 +27,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener,GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
@@ -44,7 +51,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DatabaseReference mUser;
     private DatabaseReference mDriver;
     Marker marker;
-    String rate;
+    FirebaseFirestore mFirestore;
+    private FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +63,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ChildEventListener mChildEventListener;
 
-        mUsers= FirebaseDatabase.getInstance().getReference().child("dlocation").child("kD3ulDQSUhdeIOvBo510ythiBU02");
+        mUsers= FirebaseDatabase.getInstance().getReference().child("users").child("UVSH8JLWxngFI3rPaMECa9CCn0x2");
         mUsers.push().setValue(marker);
 
-
-        mUser= FirebaseDatabase.getInstance().getReference().child("dlocation").child("UVSH8JLWxngFI3rPaMECa9CCn0x2");
-        mUser.push().setValue(marker);
-        /*
-        mDriver= FirebaseDatabase.getInstance().getReference().child("user").child("UVSH8JLWxngFI3rPaMECa9CCn0x2");
-        mDriver.push().setValue(marker);
-        */
 
         report= (Button) findViewById(R.id.report_transaction);
         report.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +84,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fetchLastLocation();
 
         Button button = (Button) findViewById(R.id.cancel_transaction);
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,8 +91,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
             }
         });
+
     }
 
+
+    /*
+    private void onAddLocation(){
+        CollectionReference locations = mFirestore.collection("locations");
+        for (int i = 0; i < 10; i++) {
+            // Get a random Restaurant POJO
+            Restaurant location = RestaurantUtil.getRandom(this);
+
+            // Add a new document to the restaurants collection
+            locations.add(location);
+        }
+    }
+*/
     private void fetchLastLocation() {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
@@ -112,6 +127,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+    private void initFirestore(){
+        mFirestore = FirebaseFirestore.getInstance();
+    }
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
@@ -125,39 +143,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMarkerClickListener(this);
-        //googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
         mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //for (DataSnapshot s:dataSnapshot.getChildren()){
-                    //double r = s.getValue(double.class);
-                    //LocationInformation user = new LocationInformation(r);
-                    //LocationInformation user = s.getValue(LocationInformation.class);
-                    //LatLng location = new LatLng(user.latitude, user.longitude);
                     double lat = dataSnapshot.child("latitude").getValue(Double.class);
                     double lng = dataSnapshot.child("longitude").getValue(Double.class);
+                    String rates = dataSnapshot.child("rates").getValue(String.class);
+                    String ident = dataSnapshot.child("id").getValue(String.class);
                     LatLng location = new LatLng(lat, lng);
-                    mMap.addMarker(new MarkerOptions().position(location)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-
-                //}
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                double lat = dataSnapshot.child("latitude").getValue(Double.class);
-                double lng = dataSnapshot.child("longitude").getValue(Double.class);
-                LatLng location = new LatLng(lat, lng);
-                mMap.addMarker(new MarkerOptions().position(location).title(rate)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-
+                    mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                    mFirestore = FirebaseFirestore.getInstance();
+                    auth = FirebaseAuth.getInstance();
+                    if (auth.getCurrentUser() != null) {
+                        /*
+                    CollectionReference locations = mFirestore.collection("locations").document("driver1",);
+                    locations.add(location);
+                    */
+                    DocumentReference Ref = mFirestore.collection("locations").document("driver1");
+                    Ref.update("latitude", lat);
+                    Ref.update("longitude", lng);
+                }
 
             }
 
@@ -166,7 +171,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResult) {

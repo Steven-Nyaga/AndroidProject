@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -97,9 +98,11 @@ private LocationRequest locationRequest;
                             FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
                                     getInstance().getCurrentUser().getUid()).child("longitude").setValue(longitude);
 
+
                     }
                 }
             }, getMainLooper());
+
         }
 
 //callPermissions();
