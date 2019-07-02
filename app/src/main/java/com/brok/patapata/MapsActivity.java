@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,7 +44,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener,GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener,GoogleMap.OnMarkerClickListener, View.OnClickListener {
     private GoogleMap mMap;
     private ChildEventListener mChildEcventListener;
     private Location currentLocation;
@@ -155,13 +156,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                double lat = dataSnapshot.child("latitude").getValue(Double.class);
-                double lng = dataSnapshot.child("longitude").getValue(Double.class);
+                final double lat = dataSnapshot.child("latitude").getValue(Double.class);
+                final double lng = dataSnapshot.child("longitude").getValue(Double.class);
                 rates = dataSnapshot.child("rates").getValue(String.class);
-                String ident = dataSnapshot.child("id").getValue(String.class);
+                final String ident = dataSnapshot.child("id").getValue(String.class);
                 location = new LatLng(lat, lng);
                 mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                //snackbar
+               mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.map),R.string.snack,Snackbar.LENGTH_LONG);
+                        snackbar.setAction(R.string.Buy, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                                mDatabase.child("users").child("notification").push().setValue(ident);
+                                mDatabase.child("users").child("notification").push().setValue(lat);
+                                mDatabase.child("users").child("notification").push().setValue(lng);
+                                Intent intent = getIntent();
 
+                                String value= intent.getStringExtra("VALUE");
+
+                                if(value.equalsIgnoreCase("1000")){
+                                    mDatabase.child("users").child("notification").push().setValue(value);
+                                }else if(value.equalsIgnoreCase("2500")){
+                                    mDatabase.child("users").child("notification").push().setValue(value);
+                                }else if(value.equalsIgnoreCase("5000")){
+                                    mDatabase.child("users").child("notification").push().setValue(value);
+                                } else if(value.equalsIgnoreCase("10000")){
+                                    mDatabase.child("users").child("notification").push().setValue(value);
+                                }
+
+                            }
+                        });
+
+                        snackbar.show();
+                        return true;
+                    }
+
+                });
 
             }
 
@@ -211,4 +245,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public boolean onMarkerClick(Marker marker) {
         return false;
     }
+    @Override
+    public void onClick(View v) {
+
+    }
+
 }

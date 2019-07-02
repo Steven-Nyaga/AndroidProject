@@ -14,13 +14,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class MainFragmentUser extends Fragment {
+    public  String value;
+    public Button button;
+    public  Spinner mySpinner;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.main_fragment_user, container, false);
 
-        Spinner mySpinner = (Spinner) myView.findViewById(R.id.spinner2);
-        Button button = (Button) myView.findViewById(R.id.litre_btn);
+        mySpinner = (Spinner) myView.findViewById(R.id.spinner2);
+        value = mySpinner.getSelectedItem().toString();
+        button = (Button) myView.findViewById(R.id.litre_btn);
 
         ArrayAdapter<String> myAdapter =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Litres));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -31,8 +35,35 @@ public class MainFragmentUser extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
                 Intent intent = new Intent(getActivity(), MapsActivity.class);
                 startActivity(intent);
+*/
+                if(value.equalsIgnoreCase("1000")){
+
+                    Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    intent.putExtra("VALUE", value);
+                    startActivity(intent);
+
+                }else if(value.equalsIgnoreCase("2500")){
+
+                    Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    intent.putExtra("VALUE", value);
+                    startActivity(intent);
+
+                }else if(value.equalsIgnoreCase("5000")){
+
+                    Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    intent.putExtra("VALUE", value);
+                    startActivity(intent);
+
+                }else if (value.equalsIgnoreCase("10000")){
+
+                    Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    intent.putExtra("VALUE", value);
+                    startActivity(intent);
+
+                }
             }
         });
 
