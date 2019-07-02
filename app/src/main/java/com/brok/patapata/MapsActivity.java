@@ -159,15 +159,15 @@ private String rates;
                      location = new LatLng(lat, lng);
 
 //new
-                    IntentFilter intentFilter = new IntentFilter();
-                    intentFilter.addAction(Intent.ACTION_TIME_TICK);
-                    locationReceiver = new BroadcastReceiver() {
-                        @Override
-                        public void onReceive(Context context, Intent intent) {
-                            mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                        }
-                    };
-                    registerReceiver(locationReceiver, intentFilter);
+                IntentFilter intentFilter = new IntentFilter();
+                intentFilter.addAction(Intent.ACTION_TIME_TICK);
+                locationReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                    }
+                };
+                registerReceiver(locationReceiver, intentFilter);
 //new
 
  //                   mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
