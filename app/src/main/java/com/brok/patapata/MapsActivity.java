@@ -159,21 +159,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
 
 
-
-
-                //                   mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-//                    mFirestore = FirebaseFirestore.getInstance();
-//                    auth = FirebaseAuth.getInstance();
-//                    if (auth.getCurrentUser() != null) {
-//                        /*
-//                    CollectionReference locations = mFirestore.collection("locations").document("driver1",);
-//                    locations.add(location);
-//                    */
-//                    DocumentReference Ref = mFirestore.collection("locations").document("driver1");
-//                    Ref.update("latitude", lat);
-//                    Ref.update("longitude", lng);
-                // }
-
             }
 
             @Override
