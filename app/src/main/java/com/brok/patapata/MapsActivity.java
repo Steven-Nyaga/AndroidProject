@@ -5,7 +5,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -53,8 +56,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker marker;
     FirebaseFirestore mFirestore;
     private FirebaseAuth auth;
+private BroadcastReceiver locationReceiver;
 
-
+private LatLng location;
+private String rates;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
     }
+
 
 
     /*
@@ -148,21 +154,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     double lat = dataSnapshot.child("latitude").getValue(Double.class);
                     double lng = dataSnapshot.child("longitude").getValue(Double.class);
-                    String rates = dataSnapshot.child("rates").getValue(String.class);
+                    rates = dataSnapshot.child("rates").getValue(String.class);
                     String ident = dataSnapshot.child("id").getValue(String.class);
-                    LatLng location = new LatLng(lat, lng);
-                    mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                    mFirestore = FirebaseFirestore.getInstance();
-                    auth = FirebaseAuth.getInstance();
-                    if (auth.getCurrentUser() != null) {
-                        /*
-                    CollectionReference locations = mFirestore.collection("locations").document("driver1",);
-                    locations.add(location);
-                    */
-                    DocumentReference Ref = mFirestore.collection("locations").document("driver1");
-                    Ref.update("latitude", lat);
-                    Ref.update("longitude", lng);
-                }
+                     location = new LatLng(lat, lng);
+
+//new
+                    IntentFilter intentFilter = new IntentFilter();
+                    intentFilter.addAction(Intent.ACTION_TIME_TICK);
+                    locationReceiver = new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                        }
+                    };
+                    registerReceiver(locationReceiver, intentFilter);
+//new
+
+ //                   mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+//                    mFirestore = FirebaseFirestore.getInstance();
+//                    auth = FirebaseAuth.getInstance();
+//                    if (auth.getCurrentUser() != null) {
+//                        /*
+//                    CollectionReference locations = mFirestore.collection("locations").document("driver1",);
+//                    locations.add(location);
+//                    */
+//                    DocumentReference Ref = mFirestore.collection("locations").document("driver1");
+//                    Ref.update("latitude", lat);
+//                    Ref.update("longitude", lng);
+               // }
 
             }
 
