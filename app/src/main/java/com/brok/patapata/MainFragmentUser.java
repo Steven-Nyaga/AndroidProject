@@ -57,22 +57,22 @@ mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             case 0:
             value = "1000";
                 FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                            getInstance().getCurrentUser().getUid()).setValue(value);
+                            getInstance().getCurrentUser().getUid()).child("litres").setValue(value);
             break;
             case 1:
                 value = "2500";
                 FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                        getInstance().getCurrentUser().getUid()).setValue(value);
+                        getInstance().getCurrentUser().getUid()).child("litres").setValue(value);
                 break;
             case 2:
                 value = "5000";
                 FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                        getInstance().getCurrentUser().getUid()).setValue(value);
+                        getInstance().getCurrentUser().getUid()).child("litres").setValue(value);
                 break;
             case 3:
                 value = "10000";
                 FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                        getInstance().getCurrentUser().getUid()).setValue(value);
+                        getInstance().getCurrentUser().getUid()).child("litres").setValue(value);
                 break;
 
         }

@@ -170,12 +170,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         snackbar.setAction(R.string.Buy, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                                mDatabase.child("users").child("notification").push().setValue(ident);
-                                mDatabase.child("users").child("notification").push().setValue(lat);
-                                mDatabase.child("users").child("notification").push().setValue(lng);
-                                Intent intent = getIntent();
-
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("requests");
+                                mDatabase.child(FirebaseAuth.
+                                        getInstance().getCurrentUser().getUid()).child("id").setValue(ident);
+                                mDatabase.child(FirebaseAuth.
+                                        getInstance().getCurrentUser().getUid()).child("latitude").setValue(lat);
+                                mDatabase.child(FirebaseAuth.
+                                        getInstance().getCurrentUser().getUid()).child("longitude").setValue(lng);
+                                //Intent intent = getIntent();
+/*
                                 String value= intent.getStringExtra("VALUE");
 
                                 if(value.equalsIgnoreCase("1000")){
@@ -187,7 +190,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 } else if(value.equalsIgnoreCase("10000")){
                                     mDatabase.child("users").child("notification").push().setValue(value);
                                 }
-
+*/
                             }
                         });
 
