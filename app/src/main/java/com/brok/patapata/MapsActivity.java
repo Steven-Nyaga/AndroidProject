@@ -41,6 +41,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.Map;
 
@@ -58,7 +59,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FirebaseFirestore mFirestore;
     private FirebaseAuth auth;
     private BroadcastReceiver locationReceiver;
-
+    public double lat, lng;
+    public String ident;
     private LatLng location;
     private String rates;
 
@@ -70,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ChildEventListener mChildEventListener;
 
-        mUsers = FirebaseDatabase.getInstance().getReference().child("users").child("UVSH8JLWxngFI3rPaMECa9CCn0x2");
+        mUsers = FirebaseDatabase.getInstance().getReference().child("users");
         mUsers.push().setValue(marker);
 
 
@@ -156,28 +158,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final double lat = dataSnapshot.child("latitude").getValue(Double.class);
-                final double lng = dataSnapshot.child("longitude").getValue(Double.class);
-                rates = dataSnapshot.child("rates").getValue(String.class);
-                final String ident = dataSnapshot.child("id").getValue(String.class);
-                location = new LatLng(lat, lng);
-                mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                //snackbar
-               mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker) {
-                        Snackbar snackbar = Snackbar.make(findViewById(R.id.map),R.string.snack,Snackbar.LENGTH_LONG);
-                        snackbar.setAction(R.string.Buy, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("requests");
-                                mDatabase.child(FirebaseAuth.
-                                        getInstance().getCurrentUser().getUid()).child("id").setValue(ident);
-                                mDatabase.child(FirebaseAuth.
-                                        getInstance().getCurrentUser().getUid()).child("latitude").setValue(lat);
-                                mDatabase.child(FirebaseAuth.
-                                        getInstance().getCurrentUser().getUid()).child("longitude").setValue(lng);
-                                //Intent intent = getIntent();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ident = snapshot.child("id").getValue(String.class);
+                    lat = snapshot.child("latitude").getValue(Double.class);
+                    lng = snapshot.child("longitude").getValue(Double.class);
+                    rates = snapshot.child("rates").getValue(String.class);
+                    //final double lat = snapshot.child("latitude").getValue(Double.class);
+                    //final double lng = snapshot.child("longitude").getValue(Double.class);
+                    //rates = .child("rates").getValue(String.class);
+                    //final String ident = snapshot.child("id").getValue(String.class);
+
+                    location = new LatLng(lat, lng);
+                    mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                    //snackbar
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                        @Override
+                        public boolean onMarkerClick(Marker marker) {
+                            Snackbar snackbar = Snackbar.make(findViewById(R.id.map), R.string.snack, Snackbar.LENGTH_LONG);
+                            snackbar.setAction(R.string.Buy, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("requests");
+                                    mDatabase.child(FirebaseAuth.
+                                            getInstance().getCurrentUser().getUid()).child("id").setValue(ident);
+                                    mDatabase.child(FirebaseAuth.
+                                            getInstance().getCurrentUser().getUid()).child("latitude").setValue(lat);
+                                    mDatabase.child(FirebaseAuth.
+                                            getInstance().getCurrentUser().getUid()).child("longitude").setValue(lng);
+                                    //Intent intent = getIntent();
 /*
                                 String value= intent.getStringExtra("VALUE");
 
@@ -191,15 +199,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     mDatabase.child("users").child("notification").push().setValue(value);
                                 }
 */
-                            }
-                        });
+                                }
+                            });
 
-                        snackbar.show();
-                        return true;
-                    }
+                            snackbar.show();
+                            return true;
+                        }
 
-                });
+                    });
 
+                }
             }
 
             @Override
