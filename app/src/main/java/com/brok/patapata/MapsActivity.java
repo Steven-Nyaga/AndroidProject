@@ -45,7 +45,9 @@ import com.google.firebase.firestore.auth.User;
 
 import java.util.Map;
 
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ROSE;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELLOW;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener,GoogleMap.OnMarkerClickListener, View.OnClickListener {
@@ -78,16 +80,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mUsers = FirebaseDatabase.getInstance().getReference().child("driverdetails");
         mUsers.push().setValue(marker);
 
-
-        report = (Button) findViewById(R.id.report_transaction);
-        report.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MapsActivity.this, Activity_Send_Report.class);
-                startActivity(intent);
-            }
-        });
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
@@ -95,14 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         fetchLastLocation();
 
-        Button button = (Button) findViewById(R.id.cancel_transaction);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MapsActivity.this, activity_user.class);
-                startActivity(intent);
-            }
-        });
+
 
     }
 
@@ -154,6 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         //Adding the created the marker on the map
         googleMap.addMarker(markerOptions).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_RED));
+        //googleMap.addMarker(new MarkerOptions().position(latLng)).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_RED));
         //for the driver
         mMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
@@ -188,6 +174,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             getInstance().getCurrentUser().getUid()).child("latitude").setValue(lat);
                                     mDatabase.child(FirebaseAuth.
                                             getInstance().getCurrentUser().getUid()).child("longitude").setValue(lng);
+                                    Intent intent = new Intent(MapsActivity.this, Activity_User_Confirmpay.class);
+                                    startActivity(intent);
                                     //Intent intent = getIntent();
 /*
                                 String value= intent.getStringExtra("VALUE");
@@ -200,8 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     mDatabase.child("users").child("notification").push().setValue(value);
                                 } else if(value.equalsIgnoreCase("10000")){
                                     mDatabase.child("users").child("notification").push().setValue(value);
-                                }
-*/
+                                }*/
                                 }
                             });
 
