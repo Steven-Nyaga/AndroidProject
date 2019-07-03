@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,7 +26,8 @@ public class Activity_User_Confirmpay extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase.getInstance().getReference().child("requeste").child("R3EB48sRcpZC25yiVTTRqLu9UjQ2").removeValue();
+                FirebaseDatabase.getInstance().getReference().child("requeste").child(FirebaseAuth.
+                        getInstance().getCurrentUser().getUid()).removeValue();
                 Intent intent = new Intent(Activity_User_Confirmpay.this, activity_user.class);
                 startActivity(intent);
             }

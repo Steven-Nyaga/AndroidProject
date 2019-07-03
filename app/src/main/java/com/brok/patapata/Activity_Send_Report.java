@@ -11,14 +11,14 @@ import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Activity_Send_Report extends AppCompatActivity {
-private EditText reportvalue;
-private Button reportB;
-private FirebaseAuth auth;
+    private EditText reportvalue;
+    private Button reportB;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity__send__report);
+        setContentView(R.layout.activity_send_report);
 
 
         reportvalue= (EditText) findViewById(R.id.report);
