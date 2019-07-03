@@ -26,7 +26,7 @@ public class Activity_User_Confirmpay extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase.getInstance().getReference().child("requeste").child(FirebaseAuth.
+                FirebaseDatabase.getInstance().getReference().child("requests").child(FirebaseAuth.
                         getInstance().getCurrentUser().getUid()).removeValue();
                 Intent intent = new Intent(Activity_User_Confirmpay.this, activity_user.class);
                 startActivity(intent);
