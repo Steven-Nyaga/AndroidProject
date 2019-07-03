@@ -45,6 +45,9 @@ import com.google.firebase.firestore.auth.User;
 
 import java.util.Map;
 
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_YELLOW;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener,GoogleMap.OnMarkerClickListener, View.OnClickListener {
     private GoogleMap mMap;
     private ChildEventListener mChildEcventListener;
@@ -59,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FirebaseFirestore mFirestore;
     private FirebaseAuth auth;
     private BroadcastReceiver locationReceiver;
-    public double lat, lng;
+    public   Double lat, lng;
     public String ident;
     private LatLng location;
     private String rates;
@@ -72,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ChildEventListener mChildEventListener;
 
-        mUsers = FirebaseDatabase.getInstance().getReference().child("users");
+        mUsers = FirebaseDatabase.getInstance().getReference().child("driverdetails");
         mUsers.push().setValue(marker);
 
 
@@ -150,7 +153,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         //Adding the created the marker on the map
-        googleMap.addMarker(markerOptions);
+        googleMap.addMarker(markerOptions).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_RED));
         //for the driver
         mMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
@@ -169,7 +172,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //final String ident = snapshot.child("id").getValue(String.class);
 
                     location = new LatLng(lat, lng);
-                    mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                    mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_YELLOW));
                     //snackbar
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override

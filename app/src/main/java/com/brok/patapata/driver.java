@@ -124,9 +124,9 @@ cUser.setText(user_email);
                     Double longitude = locationResult.getLastLocation().getLongitude();
                     if (latitude != null&&longitude!=null&&auth.getCurrentUser() != null){
 
-                            FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
+                            FirebaseDatabase.getInstance().getReference("driverdetails").child(FirebaseAuth.
                                     getInstance().getCurrentUser().getUid()).child("latitude").setValue(latitude);
-                            FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.
+                            FirebaseDatabase.getInstance().getReference("driverdetails").child(FirebaseAuth.
                                     getInstance().getCurrentUser().getUid()).child("longitude").setValue(longitude);
 
 
