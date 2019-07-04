@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -22,7 +23,8 @@ import java.util.ArrayList;
 
 public class YourRequests extends Fragment {
     private RecyclerView recyclerView;
-    public String push_key;
+    public  String driverid;
+    public DatabaseReference push_key;
    // public String reqs;
     ArrayList<POJO_requests> list;
     request_adapter adapter;
@@ -40,11 +42,17 @@ public class YourRequests extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    push_key = dataSnapshot1.getRef();
+                    driverid = dataSnapshot1.child("driverid").getValue(String.class);
+                    if(FirebaseAuth.getInstance().getCurrentUser().getUid()==driverid){
+                        POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
+                        list.add(requests);
+                    }
                     //POJO_requests requests  = new POJO_requests(dataSnapshot1.child("").getValue(POJO_requests.class));
                     POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
                   //  POJO_requests requests = new POJO_requests(reqs);
                     // user_reports r = dataSnapshot1.getValue(user_reports.class);
-                   list.add(requests);
+                  // list.add(requests);
                 }
                 adapter = new request_adapter(getActivity(),list );
                 recyclerView.setAdapter(adapter);
