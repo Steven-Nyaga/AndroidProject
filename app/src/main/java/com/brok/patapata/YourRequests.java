@@ -41,10 +41,10 @@ public class YourRequests extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                     //POJO_requests requests  = new POJO_requests(dataSnapshot1.child("").getValue(POJO_requests.class));
-                   // POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
+                    POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
                   //  POJO_requests requests = new POJO_requests(reqs);
                     // user_reports r = dataSnapshot1.getValue(user_reports.class);
-                 //   list.add(requests);
+                   list.add(requests);
                 }
                 adapter = new request_adapter(getActivity(),list );
                 recyclerView.setAdapter(adapter);

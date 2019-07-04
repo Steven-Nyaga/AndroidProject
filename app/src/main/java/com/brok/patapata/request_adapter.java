@@ -30,7 +30,7 @@ public class request_adapter extends RecyclerView.Adapter<request_adapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.litres.setText(requests.get(position).getLitres());
-        holder.id.setText(requests.get(position).getId());
+        holder.Userid.setText(requests.get(position).getUserid());
     }
 
     @Override
@@ -41,13 +41,13 @@ public class request_adapter extends RecyclerView.Adapter<request_adapter.MyView
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView litres;
-        TextView id;
+        TextView Userid;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             litres= (TextView) itemView.findViewById(R.id.litres);
-            id = (TextView) itemView.findViewById(R.id.id);
+            Userid = (TextView) itemView.findViewById(R.id.id);
         }
     }
 
