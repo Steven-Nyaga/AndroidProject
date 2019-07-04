@@ -11,38 +11,43 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class report_adapter extends RecyclerView.Adapter<report_adapter.MyViewHolder> {
+public class request_adapter extends RecyclerView.Adapter<request_adapter.MyViewHolder> {
 
     Context context;
-    ArrayList<user_reports> reports;
+    ArrayList<POJO_requests> requests;
 
-    public report_adapter(Context c , ArrayList<user_reports> r){
+    public request_adapter(Context c , ArrayList<POJO_requests> reqs){
         context = c;
-        reports = r;
+        requests = reqs;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.report_rows,parent,false));
+        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.notification_rows,parent,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-     holder.report.setText(reports.get(position).getReports());
+        holder.litres.setText(requests.get(position).getLitres());
+        holder.id.setText(requests.get(position).getId());
     }
 
     @Override
     public int getItemCount() {
-        return reports.size();
+        return requests.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-TextView report;
+
+        TextView litres;
+        TextView id;
+
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            report = (TextView) itemView.findViewById(R.id.actual_report);
+            litres= (TextView) itemView.findViewById(R.id.litres);
+            id = (TextView) itemView.findViewById(R.id.id);
         }
     }
 

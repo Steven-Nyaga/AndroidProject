@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    app:cardCornerRadius="12dp"
+    android:elevation="90dp"
+    android:layout_margin="5dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/question"
+        android:text="Can you deliver the amount of litres shown below?"
+        android:textColor="@color/text"
+        android:textSize="25dp"/>
+    <TextView
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/litres"
+        android:textAlignment="center"
+        android:text="Litres"
+        android:textColor="@color/text"
+        android:textSize="20dp"/>
+
+    <TextView
+      android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/id"
+        android:textAlignment="center"
+        android:text="Litres"
+        android:textColor="@color/text"
+        android:textSize="20dp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:visibility="invisible"
+            android:id="@+id/yes"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:background="@color/finish_transaction"
+            android:text="accept"
+            android:textColor="@color/text"
+            android:textSize="20dp" />
+
+        <Button
+            android:visibility="invisible"
+            android:id="@+id/no"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+       android:layout_alignParentRight="true"
+            android:background="@color/report_transaction"
+            android:text="Deny"
+            android:textColor="@color/text"
+            android:textSize="20dp" />
+    </RelativeLayout>
+</LinearLayout>
+</androidx.cardview.widget.CardView>
