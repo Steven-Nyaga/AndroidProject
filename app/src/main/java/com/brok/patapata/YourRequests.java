@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +26,10 @@ import java.util.ArrayList;
 public class YourRequests extends Fragment {
     private RecyclerView recyclerView;
     public  String driverid;
-    public DatabaseReference push_key;
+    public  String cdriverid;
+    public String userid;
+    //private Button yes, no;
+    public String push_key;
    // public String reqs;
     ArrayList<POJO_requests> list;
     request_adapter adapter;
@@ -35,6 +40,8 @@ public class YourRequests extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
+//        yes = (Button) getView().findViewById(R.id.yes);
+//        no = (Button) getView().findViewById(R.id.no);
         recyclerView = (RecyclerView) getView().findViewById(R.id.requestrecyler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         list = new ArrayList<POJO_requests>();
@@ -42,14 +49,18 @@ public class YourRequests extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    push_key = dataSnapshot1.getRef();
+                  //  push_key = dataSnapshot1.getKey();
                     driverid = dataSnapshot1.child("driverid").getValue(String.class);
-                    if(FirebaseAuth.getInstance().getCurrentUser().getUid()==driverid){
-                        POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
-                        list.add(requests);
-                    }
-                    //POJO_requests requests  = new POJO_requests(dataSnapshot1.child("").getValue(POJO_requests.class));
+                    cdriverid =FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    Log.d("driver id", driverid);
                     POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
+                    //if(cdriverid!=driverid){
+                        Log.d("confirm driver id", cdriverid);
+
+                        list.add(requests);
+                  // }
+                    //POJO_requests requests  = new POJO_requests(dataSnapshot1.child("").getValue(POJO_requests.class));
+                    //POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
                   //  POJO_requests requests = new POJO_requests(reqs);
                     // user_reports r = dataSnapshot1.getValue(user_reports.class);
                   // list.add(requests);
@@ -64,6 +75,10 @@ public class YourRequests extends Fragment {
 
             }
         });
+
+
+
+
 
     }
 }
