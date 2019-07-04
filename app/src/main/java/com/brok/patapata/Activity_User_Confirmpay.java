@@ -1,5 +1,6 @@
 package com.brok.patapata;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -18,9 +19,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class Activity_User_Confirmpay extends AppCompatActivity {
-
+    private DatabaseReference mReq;
     private Button report, button;
     private TextView textView;
+    public  String user_id;
+    public String push_key;
     //private Task<Void> mDelete;
 
     @Override
@@ -41,7 +44,25 @@ public class Activity_User_Confirmpay extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase.getInstance().getReference().child("requests").child(ident).removeValue();
+                mReq = FirebaseDatabase.getInstance().getReference().child("requests");
+                mReq.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            user_id = snapshot.child("user id").getValue(String.class);
+                            if(FirebaseAuth.getInstance().getCurrentUser().getUid()==user_id){
+                                push_key=snapshot.getKey();
+                                mReq.child(push_key).removeValue();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                //FirebaseDatabase.getInstance().getReference().child("requests").child(ident).removeValue();
                 Intent intent = new Intent(Activity_User_Confirmpay.this, activity_user.class);
                 startActivity(intent);
             }
