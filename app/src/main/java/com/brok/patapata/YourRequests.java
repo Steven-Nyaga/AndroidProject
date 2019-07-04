@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class YourRequests extends Fragment {
     private RecyclerView recyclerView;
+    public String push_key;
    // public String reqs;
     ArrayList<POJO_requests> list;
     request_adapter adapter;
@@ -35,8 +36,7 @@ public class YourRequests extends Fragment {
         recyclerView = (RecyclerView) getView().findViewById(R.id.requestrecyler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         list = new ArrayList<POJO_requests>();
-        FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("requests").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
