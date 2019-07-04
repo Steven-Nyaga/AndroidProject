@@ -49,7 +49,7 @@ public class Activity_User_Confirmpay extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            user_id = snapshot.child("user id").getValue(String.class);
+                            user_id = snapshot.child("userid").getValue(String.class);
                             if(FirebaseAuth.getInstance().getCurrentUser().getUid()==user_id){
                                 push_key=snapshot.getKey();
                                 mReq.child(push_key).removeValue();

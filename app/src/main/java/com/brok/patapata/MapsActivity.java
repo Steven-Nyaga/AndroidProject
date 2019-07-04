@@ -245,8 +245,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             public void onClick(View v) {
                                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("requests");
                                 pushid = mDatabase.push().getKey();
-                                mDatabase.child(pushid).child("driver id").setValue(ident);
-                                mDatabase.child(pushid).child("user id").setValue(FirebaseAuth.
+                                mDatabase.child(pushid).child("driverid").setValue(ident);
+                                mDatabase.child(pushid).child("userid").setValue(FirebaseAuth.
                                         getInstance().getCurrentUser().getUid());
                                 mDatabase.child(pushid).child("latitude").setValue(lat);
                                 mDatabase.child(pushid).child("longitude").setValue(lng);
