@@ -70,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng location;
     private String rates;
     public TextView textView;
+    public String pushid;
 
 
     @Override
@@ -243,11 +244,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             @Override
                             public void onClick(View v) {
                                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("requests");
-                                mDatabase.child(ident).child("id").setValue(FirebaseAuth.
+                                pushid = mDatabase.push().getKey();
+                                mDatabase.child(pushid).child("driver id").setValue(ident);
+                                mDatabase.child(pushid).child("user id").setValue(FirebaseAuth.
                                         getInstance().getCurrentUser().getUid());
-                                mDatabase.child(ident).child("latitude").setValue(lat);
-                                mDatabase.child(ident).child("longitude").setValue(lng);
-                                mDatabase.child(ident).child("litres").setValue(litres);
+                                mDatabase.child(pushid).child("latitude").setValue(lat);
+                                mDatabase.child(pushid).child("longitude").setValue(lng);
+                                mDatabase.child(pushid).child("litres").setValue(litres);
                                 Intent intent = new Intent(MapsActivity.this, Activity_User_Confirmpay.class);
                                 intent.putExtra("ident",ident);
                                 Bundle extras = new Bundle();
