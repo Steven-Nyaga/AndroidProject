@@ -39,10 +39,6 @@ public class MainFragmentUser extends Fragment {
         mySpinner.setAdapter(myAdapter);
 
         //Wagwan
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 /*
                 Intent intent = new Intent(getActivity(), MapsActivity.class);
                 startActivity(intent);
@@ -53,30 +49,48 @@ mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position)
         {
-
             case 0:
-            value = "1000";
-                FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                            getInstance().getCurrentUser().getUid()).child("litres").setValue(value);
-            break;
-            case 1:
-                value = "2500";
-                FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                        getInstance().getCurrentUser().getUid()).child("litres").setValue(value);
                 break;
+
+            case 1:
+            value = "1000";
+            Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra("value",value);
+            Bundle extras = new Bundle();
+            extras.putString("status", "1000 Litres");
+            intent.putExtras(extras);
+            startActivity(intent);
+            break;
             case 2:
-                value = "5000";
-                FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                        getInstance().getCurrentUser().getUid()).child("litres").setValue(value);
+                value = "2500";
+                Intent intent1 = new Intent(getActivity(), MapsActivity.class);
+                intent1.putExtra("value",value);
+                Bundle extras1 = new Bundle();
+                extras1.putString("status", "2500 Litres");
+                intent1.putExtras(extras1);
+                startActivity(intent1);
                 break;
             case 3:
+                value = "5000";
+                Intent intent2 = new Intent(getActivity(), MapsActivity.class);
+                intent2.putExtra("value",value);
+                Bundle extras2 = new Bundle();
+                extras2.putString("status", "5000 Litres");
+                intent2.putExtras(extras2);
+                startActivity(intent2);
+                break;
+            case 4:
                 value = "10000";
-                FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.
-                        getInstance().getCurrentUser().getUid()).child("litres").setValue(value);
+                Intent intent3 = new Intent(getActivity(), MapsActivity.class);
+                intent3.putExtra("value",value);
+                Bundle extras3 = new Bundle();
+                extras3.putString("status", "10000 Litres");
+                intent3.putExtras(extras3);
+                startActivity(intent3);
                 break;
 
         }
-        startActivity(new Intent(getActivity(), MapsActivity.class));
+
        // Intent intent = new Intent(getActivity(), MapsActivity.class);
                    //intent.putExtra("VALUE", value);
                  // startActivity(intent);
@@ -118,7 +132,6 @@ mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //
 //                }
             }
-        });
-    }
+
 
 }
