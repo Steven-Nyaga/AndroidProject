@@ -15,6 +15,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
@@ -68,12 +69,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public String ident;
     private LatLng location;
     private String rates;
+    public TextView textView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+
+        textView = (TextView) findViewById(R.id.ident);
 
         ChildEventListener mChildEventListener;
 
@@ -138,8 +143,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         //Adding the created the marker on the map
-        googleMap.addMarker(markerOptions).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_RED));
-        //googleMap.addMarker(new MarkerOptions().position(latLng)).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_RED));
+        //googleMap.addMarker(markerOptions).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_RED));
+        googleMap.addMarker(new MarkerOptions().position(latLng)).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_RED));
         //for the driver
         mMap = googleMap;
         googleMap.setOnMarkerClickListener(this);
@@ -152,6 +157,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     lat = snapshot.child("latitude").getValue(Double.class);
                     lng = snapshot.child("longitude").getValue(Double.class);
                     rates = snapshot.child("rates").getValue(String.class);
+                    //textView.setText(ident);
                     //final double lat = snapshot.child("latitude").getValue(Double.class);
                     //final double lng = snapshot.child("longitude").getValue(Double.class);
                     //rates = .child("rates").getValue(String.class);
@@ -160,21 +166,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     location = new LatLng(lat, lng);
                     mMap.addMarker(new MarkerOptions().position(location).title(rates)).setIcon(BitmapDescriptorFactory.defaultMarker(HUE_YELLOW));
                     //snackbar
+                    /*
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(Marker marker) {
-                            Snackbar snackbar = Snackbar.make(findViewById(R.id.map), R.string.snack, Snackbar.LENGTH_LONG);
+                            // Snackbar snackbar = Snackbar.make(findViewById(R.id.map), R.string.snack, Snackbar.LENGTH_LONG);
+                            Intent intent2 = getIntent();
+                            final String litres = intent2.getStringExtra("value");
+                            Bundle bundle = intent2.getExtras();
+                            String status = bundle.getString("status");
+                            Toast toast = Toast.makeText(MapsActivity.this, status, Toast.LENGTH_LONG);
+                            toast.show();
+
+                            Snackbar snackbar = Snackbar.make(findViewById(R.id.map), rates, Snackbar.LENGTH_LONG);
                             snackbar.setAction(R.string.Buy, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("requests");
-                                    mDatabase.child(FirebaseAuth.
-                                            getInstance().getCurrentUser().getUid()).child("id").setValue(ident);
-                                    mDatabase.child(FirebaseAuth.
-                                            getInstance().getCurrentUser().getUid()).child("latitude").setValue(lat);
-                                    mDatabase.child(FirebaseAuth.
-                                            getInstance().getCurrentUser().getUid()).child("longitude").setValue(lng);
+                                    mDatabase.child(ident).child("id").setValue(FirebaseAuth.
+                                            getInstance().getCurrentUser().getUid());
+                                    mDatabase.child(ident).child("latitude").setValue(lat);
+                                    mDatabase.child(ident).child("longitude").setValue(lng);
+                                    mDatabase.child(ident).child("litres").setValue(litres);
                                     Intent intent = new Intent(MapsActivity.this, Activity_User_Confirmpay.class);
+                                    intent.putExtra("ident",ident);
+                                    Bundle extras = new Bundle();
+                                    extras.putString("status", "Data Received!");
+                                    intent.putExtras(extras);
                                     startActivity(intent);
                                     //Intent intent = getIntent();
 /*
@@ -188,17 +206,83 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     mDatabase.child("users").child("notification").push().setValue(value);
                                 } else if(value.equalsIgnoreCase("10000")){
                                     mDatabase.child("users").child("notification").push().setValue(value);
-                                }*/
                                 }
+
+                                }
+
                             });
 
+
                             snackbar.show();
+
                             return true;
+
                         }
+
+
+
+                    });
+                    */
+
+
+                }
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        // Snackbar snackbar = Snackbar.make(findViewById(R.id.map), R.string.snack, Snackbar.LENGTH_LONG);
+
+                        Intent intent2 = getIntent();
+                        final String litres = intent2.getStringExtra("value");
+                        Bundle bundle = intent2.getExtras();
+                        String status = bundle.getString("status");
+                        Toast toast = Toast.makeText(MapsActivity.this, status, Toast.LENGTH_LONG);
+                        toast.show();
+
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.map), rates, Snackbar.LENGTH_LONG);
+                        snackbar.setAction(R.string.Buy, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("requests");
+                                mDatabase.child(ident).child("id").setValue(FirebaseAuth.
+                                        getInstance().getCurrentUser().getUid());
+                                mDatabase.child(ident).child("latitude").setValue(lat);
+                                mDatabase.child(ident).child("longitude").setValue(lng);
+                                mDatabase.child(ident).child("litres").setValue(litres);
+                                Intent intent = new Intent(MapsActivity.this, Activity_User_Confirmpay.class);
+                                intent.putExtra("ident",ident);
+                                Bundle extras = new Bundle();
+                                extras.putString("status", "Data Received!");
+                                intent.putExtras(extras);
+                                startActivity(intent);
+                                //Intent intent = getIntent();
+/*
+                                String value= intent.getStringExtra("VALUE");
+
+                                if(value.equalsIgnoreCase("1000")){
+                                    mDatabase.child("users").child("notification").push().setValue(value);
+                                }else if(value.equalsIgnoreCase("2500")){
+                                    mDatabase.child("users").child("notification").push().setValue(value);
+                                }else if(value.equalsIgnoreCase("5000")){
+                                    mDatabase.child("users").child("notification").push().setValue(value);
+                                } else if(value.equalsIgnoreCase("10000")){
+                                    mDatabase.child("users").child("notification").push().setValue(value);
+                                }
+*/
+                                }
+
+                            });
+
+
+                            snackbar.show();
+
+                            return true;
+
+                        }
+
+
 
                     });
 
-                }
             }
 
             @Override
@@ -251,5 +335,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onClick(View v) {
 
     }
+
+
+
 
 }

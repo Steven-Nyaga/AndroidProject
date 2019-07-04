@@ -25,6 +25,7 @@
         android:text="Order"
         android:onClick="litre_btn"
         android:background="@color/colorAccent"
+        android:visibility="gone"
         />
 
 </LinearLayout>

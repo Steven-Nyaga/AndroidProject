@@ -58,6 +58,7 @@
 
     <!-- Litre options -->
     <string-array name="Litres">
+        <item>Select Litres</item>
         <item>1000</item>
         <item>2500</item>
         <item>5000</item>
