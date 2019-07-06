@@ -70,5 +70,6 @@
     <!-- snackbar -->
     <string name="snack">Want to purchase?</string>
     <string name="Buy">Buy</string>
+    <string name="title_activity_driver_maps">Map</string>
 
 </resources>

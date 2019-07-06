@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class request_adapter extends RecyclerView.Adapter<request_adapter.MyViewHolder> {
-
+    private Button yes;
+    private Button no;
     Context context;
     ArrayList<POJO_requests> requests;
 
@@ -32,7 +33,25 @@ public class request_adapter extends RecyclerView.Adapter<request_adapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.litres.setText(requests.get(position).getLitres());
         holder.Userid.setText(requests.get(position).getUserid());
+
+//
+//            yes.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
+//
+//            no.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
+
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -43,8 +62,7 @@ public class request_adapter extends RecyclerView.Adapter<request_adapter.MyView
 
         TextView litres;
         TextView Userid;
-Button yes;
-        Button no;
+
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -55,22 +73,11 @@ yes = (Button) itemView.findViewById(R.id.yes);
             no= (Button) itemView.findViewById(R.id.no);
         }
 
-public void onClick(final String Userid){
-    yes.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
 
-        }
-    });
 
-    no.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
 
-        }
-});
 
-        }
+
 
 
 

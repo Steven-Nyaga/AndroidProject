@@ -1,5 +1,6 @@
 package com.brok.patapata;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,8 @@ public class YourRequests extends Fragment {
     public  String driverid;
     public  String cdriverid;
     public String userid;
-    //private Button yes, no;
+
+    private Button yes, no;
     public String push_key;
    // public String reqs;
     ArrayList<POJO_requests> list;
@@ -53,12 +55,14 @@ public class YourRequests extends Fragment {
                     driverid = dataSnapshot1.child("driverid").getValue(String.class);
                     cdriverid =FirebaseAuth.getInstance().getCurrentUser().getUid();
                     Log.d("driver id", driverid);
+                    Log.d("confirm driver id", cdriverid);
                     POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
-                    //if(cdriverid!=driverid){
-                        Log.d("confirm driver id", cdriverid);
+                    //problem code
+                    if(cdriverid!=driverid){
+
 
                         list.add(requests);
-                  // }
+                   }
                     //POJO_requests requests  = new POJO_requests(dataSnapshot1.child("").getValue(POJO_requests.class));
                     //POJO_requests requests  = dataSnapshot1.getValue(POJO_requests.class);
                   //  POJO_requests requests = new POJO_requests(reqs);
@@ -77,6 +81,21 @@ public class YourRequests extends Fragment {
         });
 
 
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+Intent intent = new Intent(getActivity(), driverMaps.class);
+
+
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
 
