@@ -31,7 +31,7 @@ public class request_adapter extends RecyclerView.Adapter<request_adapter.MyView
     private Button yes;
     private Button no;
 
-    DatabaseReference mReq;
+    private DatabaseReference mReq;
     LinearLayout parentLayout;
     Context context;
     ArrayList<POJO_requests> requests;

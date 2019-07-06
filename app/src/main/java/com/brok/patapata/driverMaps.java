@@ -1,5 +1,6 @@
 package com.brok.patapata;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
@@ -10,10 +11,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class driverMaps extends FragmentActivity implements OnMapReadyCallback {
-
+    private DatabaseReference mReq;
     private GoogleMap mMap;
+    private String userid;
     private String UserID;
 
     @Override
@@ -38,6 +45,27 @@ public class driverMaps extends FragmentActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+         userid = getIncomingIntent();
+
+       FirebaseDatabase.getInstance().getReference().child("users").child(userid).addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+               Double lat =dataSnapshot.child("latitude").getValue(Double.class);
+               Double lng =dataSnapshot.child("longitude").getValue(Double.class);
+
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
+
+
+
+
+
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
