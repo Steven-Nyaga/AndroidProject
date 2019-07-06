@@ -94,7 +94,7 @@ private LocationRequest locationRequest;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user_email = dataSnapshot.child("inputEmail").getValue().toString();
-cUser.setText(user_email);
+                cUser.setText(user_email);
             }
 
             @Override
@@ -136,41 +136,6 @@ cUser.setText(user_email);
 
         }
 
-//callPermissions();
-
-
-//        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//
-//            return;
-//        }
-
-
-
-
-
-//        fusedLocationClient.getLastLocation()
-//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-//                    @Override
-//                    public void onSuccess(Location location) {
-//                        // Got last known location. In some rare situations this can be null.
-//                        if (location != null) {
-//                            FirebaseDatabase.getInstance().getReference("dlocation").child(FirebaseAuth.
-////                                getInstance().getCurrentUser().getUid()).setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
-//
-//                                if (task.isSuccessful()){
-//                                    Toast.makeText(driver.this, "Location service Working" + task.getException(),
-//                                            Toast.LENGTH_SHORT).show();
-//                                }else{Toast.makeText(driver.this, "Location Service failed." + task.getException(),
-//                                        Toast.LENGTH_SHORT).show();}
-//                            }
-//                        });
-//                        }
-//                    }
-//                });
-
-
 
                     }
 
@@ -198,7 +163,10 @@ cUser.setText(user_email);
 
     }
 
-
+    @Override
+    protected void onResume(){
+        super.onResume();
+    }
 
 
     @Override
@@ -210,4 +178,5 @@ cUser.setText(user_email);
             super.onBackPressed();
         }
     }
+
 }

@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class driverMaps extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private String UserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,5 +44,14 @@ public class driverMaps extends FragmentActivity implements OnMapReadyCallback {
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private String getIncomingIntent(){
+        if(getIntent().hasExtra("User ID")){
+         String userid = getIntent().getStringExtra("User ID");
+         return userid;
+        }
+
+        return null;
     }
 }
