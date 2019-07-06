@@ -73,6 +73,8 @@ public class request_adapter extends RecyclerView.Adapter<request_adapter.MyView
 public void removeItem(int position){
         requests.remove(position);
         notifyItemRemoved(position);
+        notifyItemRangeChanged(position, requests.size());
+        //notifyDataSetChanged();
           final String userid = requests.get(position).getUserid();
        final String driverid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     mReq = FirebaseDatabase.getInstance().getReference().child("requests");
@@ -115,7 +117,7 @@ public void removeItem(int position){
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             litres = (TextView) itemView.findViewById(R.id.litres);
-
+            Userid = (TextView) itemView.findViewById(R.id.id);
             parentLayout = itemView.findViewById(R.id.parentLayout);
 //yes = (Button) itemView.findViewById(R.id.yes);
 //            no= (Button) itemView.findViewById(R.id.no);
