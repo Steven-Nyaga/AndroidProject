@@ -10,7 +10,8 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/parentLayout">
     <TextView
         android:paddingTop="20dp"
         android:paddingBottom="10dp"
@@ -40,31 +41,6 @@
         android:textColor="@color/text"
         android:textSize="20dp"
         />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <Button
-
-            android:id="@+id/yes"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="@color/finish_transaction"
-            android:text="accept"
-            android:textColor="@color/text"
-            android:textSize="20dp" />
-
-        <Button
-
-            android:id="@+id/no"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-       android:layout_alignParentRight="true"
-            android:background="@color/report_transaction"
-            android:text="Deny"
-            android:textColor="@color/text"
-            android:textSize="20dp" />
-    </RelativeLayout>
 </LinearLayout>
 </androidx.cardview.widget.CardView>

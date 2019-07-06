@@ -81,21 +81,6 @@ public class YourRequests extends Fragment {
         });
 
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-Intent intent = new Intent(getActivity(), driverMaps.class);
-
-
-            }
-        });
-
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
 
