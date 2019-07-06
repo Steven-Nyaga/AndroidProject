@@ -121,7 +121,7 @@ public class driverMaps extends FragmentActivity implements OnMapReadyCallback {
 
         //connecting drver and user via a path
         String url = getUrl(driverlocation.getPosition(), userlocation.getPosition(), "driving");
-        
+
     }
 
 //get user id from intent extra
